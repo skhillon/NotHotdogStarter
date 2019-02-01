@@ -104,6 +104,7 @@ class ViewController: UIViewController, // Inherit from general class
                 let currentResult = Result(image: image, title: imageTitle, isHotdog: isHotdog)
                 
                 self.resultHistoryList.append(currentResult)
+                self.updateTableView()
             }
         }
         
