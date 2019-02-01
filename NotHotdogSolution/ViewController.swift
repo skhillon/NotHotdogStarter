@@ -104,7 +104,7 @@ class ViewController: UIViewController, // Inherit from general class
                 let currentResult = Result(image: image, title: imageTitle, isHotdog: isHotdog)
                 
                 self.resultHistoryList.append(currentResult)
-                self.updateTableView()
+                self.tableView.reloadSections(IndexSet(integersIn: 0..<self.tableView.numberOfSections), with: .bottom)
             }
         }
         
@@ -135,7 +135,7 @@ class ViewController: UIViewController, // Inherit from general class
         }
         
         // Make sure all cells are HistoryCells and not some other type.
-        guard let historyCell = tableView.cellForRow(at: indexPath) as? HistoryCell else {
+        guard let historyCell = tableView.dequeueReusableCell(withIdentifier: "historyCell") as? HistoryCell else {
             return UITableViewCell()
         }
         
