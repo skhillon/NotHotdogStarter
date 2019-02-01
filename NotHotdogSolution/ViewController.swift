@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftSpinner // Fancy loading
 
 class ViewController: UIViewController, // Inherit from general class
         UINavigationControllerDelegate, UIImagePickerControllerDelegate, // To launch camera (image picker)
@@ -22,7 +23,6 @@ class ViewController: UIViewController, // Inherit from general class
     var resultHistoryList = [Result]()
     
     @IBOutlet weak var tableView: UITableView!
-    
     
     // Called whenever camera button is tapped.
     @IBAction func launchCamera(_ sender: Any) {
@@ -86,11 +86,10 @@ class ViewController: UIViewController, // Inherit from general class
             return
         }
         
-        // TODO: what do we want to do once we have the image.
-        print(image.size)
+        SwiftSpinner.show("Getting image results")
+        
     }
     
-    // TODO: make sure this works
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }

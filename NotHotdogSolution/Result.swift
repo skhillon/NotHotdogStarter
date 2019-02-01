@@ -8,7 +8,7 @@
 
 import UIKit
 
-/// The "Model", where we store each Image's results.
+/// The "Model", where we store each image's results.
 class Result {
     let image: UIImage
     let title: String
