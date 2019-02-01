@@ -40,7 +40,7 @@ class Client {
         let acceptableLabels: Set<String> = ["hotdog", "sausage"]
         
         // Extract labels array using SwiftyJSON
-        if let labels = jsonData["labelAnnotations"].array {
+        if let labels = jsonData["responses"].array?.first?["labelAnnotations"].array {
             for label in labels {
                 if let description = label["description"].string?.lowercased().replacingOccurrences(of: " ", with: "") {
                     if acceptableLabels.contains(description) {
@@ -82,8 +82,9 @@ class Client {
         
         print("======== RAW URL =======")
         print(path.absoluteString)
-        print("======== RAW PARAMS =======")
-        print(parameters)
+        
+        // NOTE: DO NOT print parameters. Recall we removed the null terminator when encoding to base 64.
+        // Therefore, the console will print that and then continue printing garbage.
         
         Alamofire.request(path,
                           method: method,
