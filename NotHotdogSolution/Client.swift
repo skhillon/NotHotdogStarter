@@ -18,11 +18,12 @@ class Client {
     // TODO
     private static let GOOGLE_API_KEY = ""
     
+    // Computed property
     private static var path: URL {
         return URL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(GOOGLE_API_KEY)")!
     }
     
-    static func classify(image: UIImage, completion: @escaping HotdogHandler) {
+    static func classify(_ image: UIImage, completion: @escaping HotdogHandler) {
         let jsonData = createRequest(from: image.base64Encoding())
         
         request(method: .post, path: path, parameters: jsonData) { jsonResponse in
@@ -36,14 +37,13 @@ class Client {
     }
     
     private static func checkHotdog(from jsonData: JSON) -> Bool {
+        let acceptableLabels: Set<String> = ["hotdog", "sausage"]
+        
         // Extract labels array using SwiftyJSON
         if let labels = jsonData["labelAnnotations"].array {
-            // If one of the labels contains the word "hotdog", then we have a hot dog!
             for label in labels {
-                if let description = label["description"].string {
-                    let modifiedDescription = description.lowercased().replacingOccurrences(of: " ", with: "")
-                    
-                    if modifiedDescription == "hotdog" {
+                if let description = label["description"].string?.lowercased().replacingOccurrences(of: " ", with: "") {
+                    if acceptableLabels.contains(description) {
                         return true
                     }
                 }
@@ -70,10 +70,10 @@ class Client {
         ]
     }
     
-    public static func request(method: HTTPMethod,
-                               path: URL,
-                               parameters: Parameters,
-                               completion: @escaping JSONHandler) {
+    private static func request(method: HTTPMethod,
+                                path: URL,
+                                parameters: Parameters,
+                                completion: @escaping JSONHandler) {
         
         let headers: HTTPHeaders = [
             "Content-Type": "application/json",

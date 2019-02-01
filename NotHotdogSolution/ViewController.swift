@@ -76,6 +76,12 @@ class ViewController: UIViewController, // Inherit from general class
         // This is how to get rid of those empty cells at the bottom.
         tableView.tableFooterView = UIView()
     }
+    
+    private func updateTableView() {
+        tableView.beginUpdates()
+        tableView.reloadData()
+        tableView.endUpdates()
+    }
 
     // MARK: - IMAGE PICKER
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -86,8 +92,27 @@ class ViewController: UIViewController, // Inherit from general class
             return
         }
         
-        SwiftSpinner.show("Getting image results")
+        let alertVC = UIAlertController(title: "Name your photo!", message: nil, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
+            SwiftSpinner.show("Getting image results")
+            
+            Client.classify(image) { isHotdog in
+                SwiftSpinner.hide()
+                
+                let imageTitle = alertVC.textFields?.first?.text ?? ""
+                let currentResult = Result(image: image, title: imageTitle, isHotdog: isHotdog)
+                
+                self.resultHistoryList.append(currentResult)
+            }
+        }
         
+        alertVC.addTextField { textField in
+            textField.placeholder = "Name"
+        }
+        alertVC.addAction(cancelAction)
+        alertVC.addAction(okAction)
+        present(alertVC, animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
