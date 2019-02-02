@@ -122,6 +122,10 @@ class ViewController: UIViewController, // Inherit from general class
     
     
     // MARK: - TABLE VIEW
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // We have as many cells as elements in the list.
         return resultHistoryList.count
