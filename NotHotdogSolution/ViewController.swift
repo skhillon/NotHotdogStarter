@@ -76,12 +76,6 @@ class ViewController: UIViewController, // Inherit from general class
         // This is how to get rid of those empty cells at the bottom.
         tableView.tableFooterView = UIView()
     }
-    
-    private func updateTableView() {
-        tableView.beginUpdates()
-        tableView.reloadData()
-        tableView.endUpdates()
-    }
 
     // MARK: - IMAGE PICKER
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -104,7 +98,7 @@ class ViewController: UIViewController, // Inherit from general class
                 let currentResult = Result(image: image, title: imageTitle, isHotdog: isHotdog)
                 
                 self.resultHistoryList.append(currentResult)
-                self.tableView.reloadSections(IndexSet(integersIn: 0..<self.tableView.numberOfSections), with: .bottom)
+                self.tableView.reloadSections(IndexSet(integersIn: 0..<self.tableView.numberOfSections), with: .automatic)
             }
         }
         
