@@ -15,7 +15,7 @@ typealias JSONHandler = ((JSON?) -> Void)
 
 class Client {
     
-    // TODO
+    // TODOLAST
     private static let GOOGLE_API_KEY = ""
     
     // Computed property
@@ -26,31 +26,11 @@ class Client {
     static func classify(_ image: UIImage, completion: @escaping HotdogHandler) {
         let jsonData = createRequest(from: image.base64Encoding())
         
-        request(method: .post, path: path, parameters: jsonData) { jsonResponse in
-            guard let json = jsonResponse else {
-                completion(false)
-                return
-            }
-            
-            completion(checkHotdog(from: json))
-        }
+        // TODO3
     }
     
     private static func checkHotdog(from jsonData: JSON) -> Bool {
-        let acceptableLabels: Set<String> = ["hotdog", "sausage"]
-        
-        // Extract labels array using SwiftyJSON
-        if let labels = jsonData["responses"].array?.first?["labelAnnotations"].array {
-            for label in labels {
-                if let description = label["description"].string?.lowercased().replacingOccurrences(of: " ", with: "") {
-                    if acceptableLabels.contains(description) {
-                        return true
-                    }
-                }
-            }
-        }
-        
-        return false
+        // TODO4
     }
     
     

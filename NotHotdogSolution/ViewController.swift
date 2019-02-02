@@ -33,12 +33,24 @@ class ViewController: UIViewController, // Inherit from general class
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupActionSheet()
         setupImagePicker()
+        setupActionSheet()
         setupTableView()
     }
     
     // MARK: - SETUP
+    private func setupImagePicker() {
+        // By default we set it to photo library.
+        imagePickerController.sourceType = .photoLibrary
+        
+        // We don't want the user to mark up the photo before the ML model processes it.
+        imagePickerController.allowsEditing = true
+        
+        // Who gets notified of events like "I'm done, here's the photo"? This main view controller!
+        // P.S. 99% of the time, you set delegates to "self" if calling from a ViewController.
+        imagePickerController.delegate = self
+    }
+    
     private func setupActionSheet() {
         let useCamera = UIAlertAction(title: "Take Photo", style: .default) { _ in
             self.imagePickerController.sourceType = .camera
@@ -54,18 +66,6 @@ class ViewController: UIViewController, // Inherit from general class
         imageChoiceSheet.addAction(pickPhoto)
     }
     
-    private func setupImagePicker() {
-        // By default we set it to photo library.
-        imagePickerController.sourceType = .photoLibrary
-        
-        // We don't want the user to mark up the photo before the ML model processes it.
-        imagePickerController.allowsEditing = true
-        
-        // Who gets notified of events like "I'm done, here's the photo"? This main view controller!
-        // P.S. 99% of the time, you set delegates to "self" if calling from a ViewController.
-        imagePickerController.delegate = self
-    }
-    
     private func setupTableView() {
         tableView.allowsSelection = false
         
@@ -79,35 +79,7 @@ class ViewController: UIViewController, // Inherit from general class
 
     // MARK: - IMAGE PICKER
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true, completion: nil)
-        
-        guard let image = info[.originalImage] as? UIImage else {
-            print("No image found")
-            return
-        }
-        
-        let alertVC = UIAlertController(title: "Name your photo!", message: nil, preferredStyle: .alert)
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
-        let okAction = UIAlertAction(title: "OK", style: .default) { _ in
-            SwiftSpinner.show("Getting image results")
-            
-            Client.classify(image) { isHotdog in
-                SwiftSpinner.hide()
-                
-                let imageTitle = alertVC.textFields?.first?.text ?? ""
-                let currentResult = Result(image: image, title: imageTitle, isHotdog: isHotdog)
-                
-                self.resultHistoryList.append(currentResult)
-                self.tableView.reloadSections(IndexSet(integersIn: 0..<self.tableView.numberOfSections), with: .automatic)
-            }
-        }
-        
-        alertVC.addTextField { textField in
-            textField.placeholder = "Name"
-        }
-        alertVC.addAction(cancelAction)
-        alertVC.addAction(okAction)
-        present(alertVC, animated: true, completion: nil)
+        // TODO5
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -126,27 +98,7 @@ class ViewController: UIViewController, // Inherit from general class
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Make sure the row isn't greater than the size of our result list.
-        guard indexPath.row < resultHistoryList.count else {
-            // Return a generic, empty cell on failure.
-            return UITableViewCell()
-        }
-        
-        // Make sure all cells are HistoryCells and not some other type.
-        guard let historyCell = tableView.dequeueReusableCell(withIdentifier: "historyCell") as? HistoryCell else {
-            return UITableViewCell()
-        }
-        
-        // Get the appropriate Result object from our list.
-        let result = resultHistoryList[indexPath.row]
-        
-        // Now that we've verified, we can use the historyCell.
-        historyCell.foodItemImageView.image = result.image
-        historyCell.titleLabel.text = result.title
-        historyCell.dateLabel.text = result.formattedDate
-        historyCell.statusImageView.image = result.isHotdog ? checkmark : cross
-        
-        return historyCell
+        // TODO2
     }
 }
 
