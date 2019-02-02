@@ -30,7 +30,20 @@ class Client {
     }
     
     private static func checkHotdog(from jsonData: JSON) -> Bool {
-        // TODO4
+        let acceptableLabels: Set<String> = ["hotdog", "sausage"]
+        
+        // Extract labels array using SwiftyJSON
+        if let labels = jsonData["responses"].array?.first?["labelAnnotations"].array {
+            for label in labels {
+                if let description = label["description"].string?.lowercased().replacingOccurrences(of: " ", with: "") {
+                    if acceptableLabels.contains(description) {
+                        return true
+                    }
+                }
+            }
+        }
+        
+        return false
     }
     
     

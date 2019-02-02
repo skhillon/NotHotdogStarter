@@ -79,7 +79,7 @@ class ViewController: UIViewController, // Inherit from general class
 
     // MARK: - IMAGE PICKER
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        // TODO5
+        // TODO4
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
